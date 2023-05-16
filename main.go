@@ -58,7 +58,7 @@ func getIPAndMAC(iface string) (string, string) {
 
 func login() {
     ip, mac := getIPAndMAC(iface)
-
+//请注意针对您的校园网修改登录请求
     macEncoded := url.QueryEscape(mac)
     loginURL := fmt.Sprintf("http://172.16.8.22:801/eportal/?c=Portal&a=login&callback=dr1004&login_method=1&user_account=%%2C0%%2C%s%%40telecom&user_password=%s&wlan_user_ip=%s&wlan_user_ipv6=&wlan_user_mac=%s&wlan_ac_ip=&wlan_ac_name=&jsVersion=3.3.3&v=9431", username, password, ip, macEncoded)
 
@@ -129,11 +129,11 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
         interval = duration
     }
 
+    saveConfig() // 保存配置项到文件
+
     if autoLogin {
         login()
     }
-
-    saveConfig() // 保存配置项到文件
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
@@ -265,33 +265,19 @@ func main() {
         Timeout: 3 * time.Second,
     }
 
-    if len(os.Args) > 1 {
-        switch os.Args[1] {
-        case "start","enable":
-            fmt.Println("启动自动登录")
-            go func() {
-                for {
-                    if autoLogin && !checkLogin() {
-                        login()
-                    }
-                    time.Sleep(interval)
-                }
-            }()
-            http.ListenAndServe(":1580", nil)
-        case "stop":
-            fmt.Println("停止自动登录")
-            saveConfig()
-            return
-        default:
-            fmt.Println("不支持的参数")
-            return
-        }
-    }
-
     http.HandleFunc("/", indexHandler)
     http.HandleFunc("/login", loginHandler)
 
-    fmt.Println("启动程序并启动http")
+    go func() {
+        for {
+            if autoLogin && !checkLogin() {
+                login()
+            }
+            time.Sleep(interval)
+        }
+    }()
+
+    fmt.Println("启动http服务器")
     http.ListenAndServe(":8080", nil)
 
     saveConfig()

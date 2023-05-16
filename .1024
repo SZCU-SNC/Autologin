@@ -7,5 +7,6 @@ debug:
     program: .
     console: integratedTerminal
     cwd: .
+    port: 8080
 compile_command: export GOARCH=arm64 && export GOOS=linux && export
   CC=aarch64-linux-gnu-gcc &&go build -o main -v
