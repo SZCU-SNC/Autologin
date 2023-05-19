@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>登录状态检查</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+
+        form {
+            width: 60%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        label {
+            display: inline-block;
+            width: 30%;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="number"] {
+            width: 60%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        input[type="checkbox"] {
+            margin-left: 10px;
+        }
+
+        button[type="submit"] {
+            background-color: #4ba1df;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #000000;
+        }
+
+        p {
+            margin-bottom: 20px;
+        }
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+        }
+        
+        footer a {
+            color: #000;
+        }
+        
+        footer a:hover {
+            color: #4ba1df;
+        }
+    </style>
+</head>
+<body>
+    <h1>登录状态检查</h1>
+    <form method="post" action="/login">
+        <p>当前状态：{{.Status}}</p>
+        <p>当前IP地址：{{.IP}}</p>
+        <p>当前MAC地址：{{.MAC}}</p>
+        <p>
+            <label for="username">用户名：</label>
+            <input type="text" name="username" id="username">
+        </p>
+        <p>
+            <label for="password">密码：</label>
+            <input type="password" name="password" id="password">
+        </p>
+        <p>
+            <label for="interval">检查间隔（秒）：</label>
+            <input type="number" name="interval" id="interval">
+        </p>
+        <p>
+            <label for="iface">网卡名称：</label>
+            <input type="text" name="iface" id="iface">
+        </p>
+        <p>
+            <label for="auto_login">自动登录：</label>
+            <input type="checkbox" name="auto_login" id="auto_login" value="1">
+        </p>
+        <p>
+            <button type="submit">配置</button>
+        </p>
+    </form>
+      <script>
+      // JavaScript代码
+// 获取输入框和勾选框的元素
+const usernameInput = document.getElementById('username');
+const passwordInput = document.getElementById('password');
+const intervalInput = document.getElementById('interval');
+const ifaceInput = document.getElementById('iface');
+const autoLoginCheckbox = document.getElementById('auto_login');
+
+// 获取上次保存的配置项
+const savedConfig = JSON.parse(localStorage.getItem('config')) || {};
+
+// 设置输入框和勾选框的值
+usernameInput.value = savedConfig.username || '';
+passwordInput.value = savedConfig.password || '';
+intervalInput.value = savedConfig.interval || '';
+ifaceInput.value = savedConfig.iface || '';
+autoLoginCheckbox.checked = savedConfig.autoLogin || false;
+
+// 监听输入框和勾选框的变化，保存配置项到localStorage中
+usernameInput.addEventListener('input', saveConfig);
+passwordInput.addEventListener('input', saveConfig);
+intervalInput.addEventListener('input', saveConfig);
+ifaceInput.addEventListener('input', saveConfig);
+autoLoginCheckbox.addEventListener('change', saveConfig);
+
+function saveConfig() {
+  // 获取输入框和勾选框的值
+  const username = usernameInput.value;
+  const password = passwordInput.value;
+  const interval = intervalInput.value;
+  const iface = ifaceInput.value;
+  const autoLogin = autoLoginCheckbox.checked;
+
+  // 将输入框和勾选框的值存储到localStorage中
+  localStorage.setItem('config', JSON.stringify({ username, password, interval, iface, autoLogin }));
+}
+    </script>
+    <footer><a href="https://tianli-blog.club/">使用文档</a></footer>
+    <footer>Powered By <a href="https://tianli-blog.club/">Tianli</a></footer>
+</body>
+</html>

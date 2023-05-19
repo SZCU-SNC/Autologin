@@ -75,6 +75,20 @@
         p:last-child {
             margin-bottom: 0;
         }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+        }
+        
+        footer a {
+            color: #000;
+        }
+        
+        footer a:hover {
+            color: #4ba1df;
+        }
     </style>
 </head>
 <body>
@@ -145,5 +159,7 @@ function saveConfig() {
   localStorage.setItem('config', JSON.stringify({ username, password, interval, iface, autoLogin }));
 }
     </script>
+    <footer><a href="https://tianli-blog.club/">使用文档</a></footer>
+    <footer>Powered By <a href="https://tianli-blog.club/">Tianli</a></footer>
 </body>
 </html>
