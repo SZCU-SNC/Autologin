@@ -30,6 +30,7 @@ var (
 	client     http.Client
 )
 
+//go:embed index.html
 var indexHTML []byte
 
 type Config struct {
@@ -309,7 +310,7 @@ func main() {
 	}()
 
 	fmt.Println("启动http服务器")
-	err := http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(":1580", nil)
 	if err != nil {
 		fmt.Println(err)
 	}
